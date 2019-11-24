@@ -1,37 +1,41 @@
 package ru.rosbank.javaschool.service;
 
-import ru.rosbank.javaschool.repository.Card;
-import ru.rosbank.javaschool.repository.CardLevel;
+import ru.rosbank.javaschool.model.Card;
+import ru.rosbank.javaschool.model.Level;
 
 public class CardService {
 
-    public void checkLevel(Card card) {
-        if (card.getCardLevel().equals(CardLevel.BLUE)){
-            card.setCountBonusPerOneOfThousand(50);
-            card.setMinBorderPrice(1);
-            card.setMaxBorderPrice(15000);
-            if (card.getTotalSum() > card.getMaxBorderPrice()){
-                card.setCardLevel(CardLevel.SILVER);
-                System.out.println("LevelUp");
+    public Enum checkLevel(Card card) {
+        int actualTotalSum = card.getTotalSum() + card.getLastBuy();
+         if (card.getLevel().equals(Level.NONE)){
+            if (actualTotalSum < card.getMaxBorderPrice()) {
+                return card.getLevel();
             }
-        } if (card.getCardLevel().equals(CardLevel.SILVER)) {
-            card.setCountBonusPerOneOfThousand(70);
-            card.setMinBorderPrice(15001);
-            card.setMaxBorderPrice(150000);
-            if (card.getTotalSum() > card.getMaxBorderPrice()){
-                card.setCardLevel(CardLevel.GOLD);
-                System.out.println("LevelUp");
+            card.setLevel(Level.BLUE);
+            return card.getLevel();
+        } else if (card.getLevel().equals(Level.BLUE)){
+            if (actualTotalSum < card.getMaxBorderPrice()) {
+                return card.getLevel();
             }
-        } if (card.getCardLevel().equals(CardLevel.GOLD)) {
-            card.setCountBonusPerOneOfThousand(100);
-            card.setMinBorderPrice(150001);
-        }
+            card.setLevel(Level.SILVER);
+            return card.getLevel();
+        } else if (card.getLevel().equals(Level.SILVER)) {
+            if (actualTotalSum < card.getMaxBorderPrice()){
+                return card.getLevel();
+            }
+            card.setLevel(Level.GOLD);
+            return card.getLevel();
+        } else {
+             return card.getLevel();
+         }
     }
 
-    public void countCalculateBonus(Card card){
-        card.setTotalSum(card.getTotalSum() + card.getLastBuy());
+    //public Card setBorderPrice(Card, )
+
+    public int calculateBonus(Card card){
         card.setCurrentBonus(card.getLastBuy() / 1000 * card.getCountBonusPerOneOfThousand());
-        System.out.println("Current Bonus for card " + card.getCardLevel() + " " + card.getCurrentBonus());
+        return card.getCurrentBonus();
+        //.out.println("Current Bonus for card " + card.getCardLevel() + " " + card.getCurrentBonus());
     }
 
 
