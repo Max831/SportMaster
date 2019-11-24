@@ -30,12 +30,10 @@ public class CardService {
          }
     }
 
-    //public Card setBorderPrice(Card, )
 
     public int calculateBonus(Card card){
         card.setCurrentBonus(card.getLastBuy() / 1000 * card.getCountBonusPerOneOfThousand());
         return card.getCurrentBonus();
-        //.out.println("Current Bonus for card " + card.getCardLevel() + " " + card.getCurrentBonus());
     }
 
 
